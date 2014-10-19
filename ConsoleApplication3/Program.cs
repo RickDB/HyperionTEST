@@ -48,7 +48,6 @@ namespace ConsoleApplication3
 
             hyperionSocket.Connect("10.1.2.77", 19445);
             hyperionStream = hyperionSocket.GetStream();
-
             Console.WriteLine("CONNECTED!");
 
             hyperionStream.Write(header, 0, 0);
@@ -57,8 +56,9 @@ namespace ConsoleApplication3
 
             hyperionStream.Flush();
             Console.WriteLine("FLUSHED DATA!");
+
             HyperionReply reply = receiveReply();
-            Console.WriteLine("Reply: " + reply);
+            Console.WriteLine("REPLY: " + reply);
 
         }
         private HyperionReply receiveReply()
