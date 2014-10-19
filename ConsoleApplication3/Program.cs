@@ -31,8 +31,10 @@ namespace ConsoleApplication3
             colorRequest.priority_ = 1;
             colorRequest.duration_ = 10;
 
-            HyperionRequest request = new HyperionRequest();
-            request.command_ = HyperionRequest.Types.Command.COLOR;
+            HyperionRequest request = HyperionRequest.CreateBuilder()
+                .SetCommand(HyperionRequest.Types.Command.CLEARALL)
+                .Build();
+            
             HyperionSendRequest(request);
         }
 
@@ -72,6 +74,5 @@ namespace ConsoleApplication3
             HyperionReply reply = HyperionReply.ParseFrom(data);
             return reply;
         }
-
     }
 }
