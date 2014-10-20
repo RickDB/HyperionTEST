@@ -20,21 +20,22 @@ namespace ConsoleApplication3
         }
         private void HyperionTestMethod()
         {
-            HyperionChangeColor(0, 0, 0);
+            HyperionChangeColor(255, 255, 255);
             Console.Read();
         }
 
         private void HyperionChangeColor(int red, int green, int blue)
         {
-            ColorRequest colorRequest = new ColorRequest();
-            colorRequest.rgbColor_ = 0x00FF00FF;
-            colorRequest.priority_ = 1;
-            colorRequest.duration_ = 10;
+            ColorRequest colorRequest = ColorRequest.CreateBuilder()
+                .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
+                .SetPriority(1)
+                .SetDuration(-1)
+                .Build();
 
             HyperionRequest request = HyperionRequest.CreateBuilder()
-                .SetCommand(HyperionRequest.Types.Command.CLEARALL)
+                .SetCommand(HyperionRequest.Types.Command.COLOR)
+                .SetExtension(ColorRequest.ColorRequest_, colorRequest)
                 .Build();
-            
             HyperionSendRequest(request);
         }
 
@@ -52,7 +53,9 @@ namespace ConsoleApplication3
             hyperionStream = hyperionSocket.GetStream();
             Console.WriteLine("CONNECTED!");
 
-            hyperionStream.Write(header, 0, 0);
+            StreamWriter sw = new StreamWriter(hyperionStream);
+            sw.Write(header);
+            hyperionStream.Write(header, 0, header.Count());
             request.WriteTo(hyperionStream);
             Console.WriteLine("WRITTEN DATA!");
 
